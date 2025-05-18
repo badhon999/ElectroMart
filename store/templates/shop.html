@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load cart %}
+{% load custom_filter %}
+
+<div class="container">
+    <h1 class="mt-5">Welcome to the Shop</h1>
+    <p>Explore our wide range of products!</p>
+
+    <!-- Shop Start -->
+    <div class="container-fluid pt-5">
+        <div class="row px-xl-5">
+
+            <!-- Sidebar: Filters -->
+            <div class="col-lg-3 col-md-12">
+
+                <!-- Price Filter -->
+                <div class="border-bottom mb-4 pb-4">
+                    <h5 class="font-weight-semi-bold mb-4">Filter by price</h5>
+                    <form method="GET" action="{% url 'shop' %}">
+                        <div class="custom-control custom-radio mb-2">
+                            <input type="radio" class="custom-control-input" id="price-all" name="price_range" value="all" checked>
+                            <label class="custom-control-label" for="price-all">All Prices</label>
+                        </div>
+                        <div class="custom-control custom-radio mb-2">
+                            <input type="radio" class="custom-control-input" id="price-1" name="price_range" value="0-100">
+                            <label class="custom-control-label" for="price-1">৳0 - ৳100</label>
+                        </div>
+                        <!-- Add other price ranges here -->
+                        <button type="submit" class="btn btn-primary mt-3">Filter</button>
+                    </form>
+                </div>
+
+                <!-- Color and Size Filters (unchanged) -->
+                <!-- ... your color and size filters here ... -->
+
+            </div>
+
+            <!-- Main Content: Products -->
+            <div class="col-lg-9 col-md-12">
+
+                <!-- ✅ Inject Recommendation Section -->
+                {% include 'partials/recommended.html' %}
+
+                <!-- Products -->
+                <div class="row mx-auto">
+                    {% for product in products %}
+                    <div class="card mx-auto mb-3" id="{{product.id}}" style="width: 18rem;">
+                        <img class="card-img-top" src="{{product.image.url}}" alt="{{product.name}}">
+                        <div class="card-body">
+                            <p class="card-title">{{product.name}} (Size: {{product.size}}, Color: {{product.color}})</p>
+                            <p class="card-text"><b>{{product.price|currency}}</b></p>
+                            {% if product.has_ar %}
+                                <a href="{{ product.ar_url }}" class="btn btn-primary">View AR</a>
+                            {% endif %}
+                            {% if product.has_vr %}
+                                <a href="{{ product.vr_url }}" class="btn btn-primary">View VR</a>
+                            {% endif %}
+                        </div>
+
+                        <div class="card-footer p-0 no-gutters">
+                            {% if product|is_in_cart:request.session.cart %}
+                            <div class="row no-gutters">
+                                <form action="/#{{product.id}}" class="col-2" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="product" value="{{product.id}}">
+                                    <input type="hidden" name="remove" value="True">
+                                    <input type="submit" value=" - " class="btn btn-block btn-success border-right">
+                                </form>
+                                <div class="text-center col btn btn-success">{{product|cart_quantity:request.session.cart}} in Cart</div>
+                                <form action="/#{{product.id}}" class="col-2" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="product" value="{{product.id}}">
+                                    <input type="submit" value=" + " class="btn btn-block btn-success border-left">
+                                </form>
+                            </div>
+                            {% else %}
+                            <form action="/#{{product.id}}" method="POST" class="btn-block">
+                                {% csrf_token %}
+                                <input type="hidden" name="product" value="{{product.id}}">
+                                <input type="submit" class="float-right btn btn-success form-control" value="Add To Cart">
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,63 @@
+/* Basic styles for the checkout page */
+
+body {
+    color: rgb(158, 52, 158) !important;
+}
+h1, h2, h3, h4, h5, h6, p, span, a, label, td, th {
+    color: rgb(158, 52, 158)  !important;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.recommended-section {
+        background: #f9f9f9;
+        padding: 50px 20px;
+        margin-bottom: 50px;
+        border-radius: 10px;
+        box-shadow: 0px 5px 15px rgba(0,0,0,0.05);
+    }
+.recommended-section h2 {
+        font-weight: bold;
+        margin-bottom: 40px;
+        color: #2c3e50;
+    }
+.recommended-section .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+.recommended-section .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }

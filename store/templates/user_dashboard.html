@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load cart %}
+{% load custom_filter %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">Welcome, {{ customer.first_name }}</h2>
+    <a href="{% url 'edit_profile' %}" class="btn btn-outline-primary mb-3">Edit Profile</a>
+    <hr>
+
+    <!-- Order History -->
+    <h4>Your Orders</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Date</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.product.name }}</td>
+                <td>{{ order.date }}</td>
+                <td>{{ order.quantity }}</td>
+                <td>{{ order.price|currency }}</td>
+                <td>{{ order.quantity|multiply:order.price|currency }}</td>
+                <td>
+                    {% if order.status %}
+                    <span class="badge badge-success">Completed</span>
+                    {% else %}
+                    <span class="badge badge-warning">Pending</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6">No orders found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Personalized Recommendations -->
+    <h4 class="mt-5">Recommended For You</h4>
+    <div class="row">
+        {% for product in recommended_products %}
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text"><b>{{ product.price|currency }}</b></p>
+                    <a href="/product/{{ product.id }}" class="btn btn-primary btn-sm">View Product</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>No recommendations at the moment.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
